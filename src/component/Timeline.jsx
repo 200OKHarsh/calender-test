@@ -27,6 +27,11 @@ const Timeline = () => {
           time: ['9:30 - 13:00'],
           location: ['Location'],
         },
+        {
+          date: '2024-06-10T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
       ],
     },
     {
@@ -48,6 +53,11 @@ const Timeline = () => {
           time: ['9:30 - 13:00'],
           location: ['Location'],
         },
+        {
+          date: '2024-06-09T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
       ],
     },
     {
@@ -66,6 +76,11 @@ const Timeline = () => {
         },
         {
           date: '2024-05-30T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-06-08T09:20:21.178Z',
           time: ['9:30 - 13:00'],
           location: ['Location'],
         },
@@ -92,6 +107,11 @@ const Timeline = () => {
         },
         {
           date: '2024-05-30T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-06-07T09:20:21.178Z',
           time: ['9:30 - 13:00'],
           location: ['Location'],
         },
@@ -122,7 +142,7 @@ const Timeline = () => {
       ),
     }));
 
-    setSchedule(filteredData);
+    setSchedule(dummyData);
 
     // Uncomment and modify this for real API call
     // axios.get(`/api/schedule?start=${weekStart.toISOString().split('T')[0]}&end=${weekEnd.toISOString().split('T')[0]}`)
