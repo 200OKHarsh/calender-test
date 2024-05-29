@@ -6,7 +6,7 @@
 
 .week-navigation {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   margin-bottom: 10px;
 }
 
@@ -23,7 +23,11 @@
   color: white;
 }
 
-.schedule-slot .activity-box:nth-child(1) {
+.schedule-slot .activity-box {
+  background-color: #01303a;
+}
+
+/* .schedule-slot .activity-box:nth-child(1) {
   background-color: #007bff;
 }
 
@@ -41,7 +45,7 @@
 
 .schedule-slot .activity-box:nth-child(5) {
   background-color: #6c757d;
-}
+} */
 
 .schedule-slot .activity-box .location {
   font-size: 0.8em;

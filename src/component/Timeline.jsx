@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Table, Modal, Button, Form } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { Table, Modal, Button, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 import axios from 'axios';
+import { format, formatISO } from 'date-fns';
+import { SolidArrowLeft, SolidArrowRight } from './Icon';
 
 const Timeline = () => {
   const dummyData = [
@@ -10,95 +12,173 @@ const Timeline = () => {
       activity: 'Pottery',
       sessionLength: '2/3 Days',
       times: [
-        { day: 'Sunday', time: ['9:30 - 13:00'], location: ['Location'] },
-        { day: 'Monday', time: [], location: [] },
-        { day: 'Tuesday', time: ['9:30 - 13:00'], location: ['Location'] },
-        { day: 'Wednesday', time: ['9:30 - 13:00'], location: ['Location'] },
+        {
+          date: '2024-05-26T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-05-28T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-05-29T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
       ],
     },
     {
-      activity: 'The Great Manor House',
-      sessionLength: '30 Mins',
-      times: [
-        { day: 'Sunday', time: ['9:30 - 13:00'], location: ['Location'] },
-        { day: 'Monday', time: [], location: [] },
-        // { day: 'Tuesday', time: ['9:30 - 13:00'], location: ['Location'] },
-        { day: 'Wednesday', time: ['9:30 - 13:00'], location: ['Location'] },
-      ],
-    },
-    {
-      activity: 'Hand Build Potery',
+      activity: 'Badminton',
       sessionLength: '90 Mins',
       times: [
-        { day: 'Sunday', time: ['9:30 - 13:00'], location: ['Location'] },
-        { day: 'Monday', time: [], location: [] },
-        // { day: 'Tuesday', time: ['9:30 - 13:00'], location: ['Location'] },
-        { day: 'Wednesday', time: ['9:30 - 13:00'], location: ['Location'] },
+        {
+          date: '2024-05-27T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-05-25T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-05-30T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
       ],
     },
     {
-      activity: 'Badmintion',
-      sessionLength: '90 mins',
+      activity: 'Cricket',
+      sessionLength: '120 Mins',
       times: [
-        { day: 'Sunday', time: [], location: [] },
-        { day: 'Monday', time: ['9:30 - 13:00'], location: ['Location'] },
-        { day: 'Tuesday', time: ['9:30 - 13:00'], location: ['Location'] },
-        // { day: 'Wednesday', time: ['9:30 - 13:00'], location: ['Location'] },
+        {
+          date: '2024-05-27T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-05-21T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-05-30T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
       ],
     },
-    // More dummy data...
+    {
+      activity: 'Swimming',
+      sessionLength: '45 Mins',
+      times: [
+        {
+          date: '2024-05-23T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-06-01T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-06-02T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+        {
+          date: '2024-05-30T09:20:21.178Z',
+          time: ['9:30 - 13:00'],
+          location: ['Location'],
+        },
+      ],
+    },
   ];
 
   const [schedule, setSchedule] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
-    setSchedule(dummyData);
+    fetchScheduleForWeek(startDate);
+  }, [startDate]);
 
-    // Fetch data from API
-    // axios.get('/api/schedule')
+  const formatDate = (date) => formatISO(new Date(date), { representation: 'date' });
+
+  const fetchScheduleForWeek = (date) => {
+    const weekStart = new Date(date);
+    weekStart.setDate(date.getDate() - date.getDay());
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+
+    const filteredData = dummyData.map((activity) => ({
+      ...activity,
+      times: activity.times.filter(
+        (time) => new Date(time.date) >= weekStart && new Date(time.date) <= weekEnd
+      ),
+    }));
+
+    setSchedule(filteredData);
+
+    // Uncomment and modify this for real API call
+    // axios.get(`/api/schedule?start=${weekStart.toISOString().split('T')[0]}&end=${weekEnd.toISOString().split('T')[0]}`)
     //   .then(response => {
     //     setSchedule(response.data);
     //   })
     //   .catch(error => {
     //     console.error("There was an error fetching the schedule!", error);
     //   });
-  }, []);
+  };
 
   const [showModal, setShowModal] = useState(false);
   const [currentSlot, setCurrentSlot] = useState({ activityIndex: null, dayIndex: null });
   const [newActivity, setNewActivity] = useState({ time: '', location: '' });
+  const [isEditing, setIsEditing] = useState(false);
+  const [isAddingNew, setIsAddingNew] = useState(false);
 
-  const handleSlotClick = (activityIndex, dayIndex) => {
+  const handleSlotClick = (activityIndex, dayIndex, timeSlot) => {
     setCurrentSlot({ activityIndex, dayIndex });
+    if (timeSlot && !isAddingNew) {
+      setNewActivity({ time: timeSlot.time.join(', '), location: timeSlot.location.join(', ') });
+      setIsEditing(true);
+    } else {
+      setNewActivity({ time: '', location: '' });
+      setIsEditing(false);
+      setIsAddingNew(true);
+    }
     setShowModal(true);
   };
 
   const handleModalClose = () => {
     setShowModal(false);
     setNewActivity({ time: '', location: '' });
+    setIsEditing(false);
+    setIsAddingNew(false);
   };
 
   const handleModalSave = () => {
     const updatedSchedule = [...schedule];
     const { activityIndex, dayIndex } = currentSlot;
+    const dateKey = getWeekDates(startDate)[dayIndex].toISOString();
 
-    // Ensure the times array has an entry for each dayIndex
-    if (!updatedSchedule[activityIndex].times[dayIndex]) {
-      updatedSchedule[activityIndex].times[dayIndex] = { time: [], location: [] };
+    const timeSlot = updatedSchedule[activityIndex].times.find((slot) => formatDate(slot.date) === formatDate(dateKey));
+    if (timeSlot && isEditing) {
+      timeSlot.time = newActivity.time.split(', ');
+      timeSlot.location = newActivity.location.split(', ');
+    } else if (timeSlot && isAddingNew) {
+      timeSlot.time.push(newActivity.time);
+      timeSlot.location.push(newActivity.location);
+    } else {
+      updatedSchedule[activityIndex].times.push({
+        date: dateKey,
+        time: [newActivity.time],
+        location: [newActivity.location],
+      });
     }
-
-    // Initialize times and location as arrays if they are not already
-    if (!Array.isArray(updatedSchedule[activityIndex].times[dayIndex].time)) {
-      updatedSchedule[activityIndex].times[dayIndex].time = [];
-    }
-    if (!Array.isArray(updatedSchedule[activityIndex].times[dayIndex].location)) {
-      updatedSchedule[activityIndex].times[dayIndex].location = [];
-    }
-
-    // Append the new activity to the existing activities
-    updatedSchedule[activityIndex].times[dayIndex].time.push(newActivity.time);
-    updatedSchedule[activityIndex].times[dayIndex].location.push(newActivity.location);
 
     setSchedule(updatedSchedule);
     handleModalClose();
@@ -114,7 +194,7 @@ const Timeline = () => {
     for (let i = 0; i < 7; i++) {
       const date = new Date(start);
       date.setDate(start.getDate() + i);
-      week.push(date.toDateString());
+      week.push(date);
     }
     return week;
   };
@@ -135,12 +215,16 @@ const Timeline = () => {
 
   return (
     <div className="schedule-container">
+      <span className="week-range">
+        {weekDates[0].toDateString()} - {weekDates[6].toDateString()}
+      </span>
       <div className="week-navigation">
-        <Button variant="secondary" onClick={goToPreviousWeek}>Previous Week</Button>
-        <span className="week-range">
-          {weekDates[0]} - {weekDates[6]}
+        <span onClick={goToPreviousWeek}>
+          <SolidArrowLeft />
         </span>
-        <Button variant="secondary" onClick={goToNextWeek}>Next Week</Button>
+        <span onClick={goToNextWeek}>
+          <SolidArrowRight />
+        </span>
       </div>
 
       <Table bordered>
@@ -149,7 +233,7 @@ const Timeline = () => {
             <th>Activity</th>
             <th>Session Length</th>
             {weekDates.map((date, index) => (
-              <th key={index}>{date}</th>
+              <th key={index}>{format(date, 'eeee do')}</th>
             ))}
           </tr>
         </thead>
@@ -158,22 +242,32 @@ const Timeline = () => {
             <tr key={activityIndex}>
               <td>{activity.activity}</td>
               <td>{activity.sessionLength}</td>
-              {weekDates.map((date, dayIndex) => (
-                <td key={dayIndex} className="schedule-slot" onClick={() => handleSlotClick(activityIndex, dayIndex)}>
-                  {activity.times[dayIndex] && Array.isArray(activity.times[dayIndex].time) && activity.times[dayIndex].time.length > 0 ? (
-                    <div>
-                      {activity.times[dayIndex].time.map((time, index) => (
-                        <div key={index} className="activity-box">
-                          <div>{time}</div>
-                          <div className="location">{activity.times[dayIndex].location[index]}</div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <Button variant="light">+</Button>
-                  )}
-                </td>
-              ))}
+              {weekDates.map((date, dayIndex) => {
+                const dateKey = date.toISOString();
+                const timeSlot = activity.times.find((slot) => formatDate(slot.date) === formatDate(dateKey));
+
+                return (
+                  <td key={dayIndex} className="schedule-slot">
+                    {timeSlot && (
+                      <div>
+                        {timeSlot.time.map((time, index) => (
+                          <div
+                            key={index}
+                            className="activity-box"
+                            onClick={() => handleSlotClick(activityIndex, dayIndex, timeSlot)}
+                          >
+                            <div>{time}</div>
+                            <div className="location">{timeSlot.location[index]}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <Button variant="light" onClick={() => handleSlotClick(activityIndex, dayIndex, null)}>
+                      +
+                    </Button>
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>
@@ -181,7 +275,7 @@ const Timeline = () => {
 
       <Modal show={showModal} onHide={handleModalClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Activity</Modal.Title>
+          <Modal.Title>{isEditing ? 'Edit Activity' : 'Add Activity'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
