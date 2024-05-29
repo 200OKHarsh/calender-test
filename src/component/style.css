@@ -1,0 +1,89 @@
+/* Timeline.css */
+.schedule-container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.week-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.schedule-slot {
+  position: relative;
+  height: 100px;
+  cursor: pointer;
+}
+
+.schedule-slot .activity-box {
+  margin: 5px 0;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+}
+
+.schedule-slot .activity-box:nth-child(1) {
+  background-color: #007bff;
+}
+
+.schedule-slot .activity-box:nth-child(2) {
+  background-color: #28a745;
+}
+
+.schedule-slot .activity-box:nth-child(3) {
+  background-color: #ffc107;
+}
+
+.schedule-slot .activity-box:nth-child(4) {
+  background-color: #dc3545;
+}
+
+.schedule-slot .activity-box:nth-child(5) {
+  background-color: #6c757d;
+}
+
+.schedule-slot .activity-box .location {
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+/* styles.css */
+
+/* Wrapper styles */
+.Wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Table container styles */
+  .TableContainer {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+  }
+  
+  /* Table row styles */
+  .TableRow {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #e4e4e4;
+    height: 50px;
+  }
+  
+  /* Table cell styles */
+  .TableCell {
+    flex: 1;
+    padding: 0 10px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    border-right: 1px solid #e4e4e4;
+  }
+  
+  /* Gantt container styles */
+  .GanttContainer {
+    flex: 1;
+    overflow-y: scroll;
+  }
+  
